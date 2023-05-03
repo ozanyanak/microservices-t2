@@ -1,4 +1,4 @@
-package com.kodlamaio.inventoryservice.business.dto.requests;
+package com.kodlamaio.inventoryservice.business.dto.requests.create;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -8,15 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateBrandRequest {
     @NotBlank
-    @Size(min=2, max = 10)
+    @Size(min = 2, max = 20)
     private String name;
 
 }

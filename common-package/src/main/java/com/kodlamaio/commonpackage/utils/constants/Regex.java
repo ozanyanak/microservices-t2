@@ -1,2 +1,4 @@
-package com.kodlamaio.commonpackage.utils.constants;public class Regex {
+package com.kodlamaio.commonpackage.utils.constants;
+
+public class Regex {
 }

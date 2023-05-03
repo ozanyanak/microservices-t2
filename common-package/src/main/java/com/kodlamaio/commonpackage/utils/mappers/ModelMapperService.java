@@ -1,4 +1,4 @@
-package com.kodlamaio.utils.mappers;
+package com.kodlamaio.commonpackage.utils.mappers;
 
 import org.modelmapper.ModelMapper;
 
