@@ -1,5 +1,7 @@
 package com.kodlamaio.inventoryservice.business.dto.requests.Update;
 
+import com.kodlamaio.commonpackage.utils.annotations.NotFutureYear;
+import com.kodlamaio.commonpackage.utils.annotations.ValidPlate;
 import com.kodlamaio.inventoryservice.entities.enums.State;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,10 +21,11 @@ public class UpdateCarRequest {
     @NotNull
     private UUID modelId;
     @Min(value = 2000)
-    // TODO: NotFuture custom annotation
+    @NotFutureYear
     private int modelYear;
     @NotBlank
-    // TODO: Add Regex
+    @ValidPlate
+
     private String plate;
     @NotNull
     private State state;

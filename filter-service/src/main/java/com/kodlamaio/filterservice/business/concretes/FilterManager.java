@@ -2,7 +2,7 @@ package com.kodlamaio.filterservice.business.concretes;
 
 import com.kodlamaio.commonpackage.utils.mappers.ModelMapperService;
 import com.kodlamaio.filterservice.business.abstracts.FilterService;
-import com.kodlamaio.filterservice.business.dto.response.GetAllFilterResponse;
+import com.kodlamaio.filterservice.business.dto.response.GetAllFiltersResponse;
 import com.kodlamaio.filterservice.business.dto.response.GetFilterResponse;
 import com.kodlamaio.filterservice.entities.Filter;
 import com.kodlamaio.filterservice.repository.FilterRepository;
@@ -16,28 +16,36 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FilterManager implements FilterService {
     private final FilterRepository repository;
-    private final ModelMapperService mapper;
+    private ModelMapperService mapper;
 
-    //todo filterservice manager ayarlanacak
     @Override
-    public List<GetAllFilterResponse> getall() {
-        return null;
+    public List<GetAllFiltersResponse> getAll() {
+        var filters = repository.findAll();
+        var response = filters
+                .stream()
+                .map(filter -> mapper.forResponse().map(filter, GetAllFiltersResponse.class))
+                .toList();
 
+        return response;
     }
 
     @Override
     public GetFilterResponse getById(UUID id) {
-        return null;
+        var filter = repository.findById(id).orElseThrow();
+        var response = mapper.forResponse().map(filter, GetFilterResponse.class);
+
+        return response;
     }
 
     @Override
     public void add(Filter filter) {
-
+        filter.setId(UUID.randomUUID());
+        repository.save(filter);
     }
 
     @Override
     public void delete(UUID id) {
-
+        repository.deleteById(id);
     }
 
     @Override
@@ -49,4 +57,6 @@ public class FilterManager implements FilterService {
     public void deleteByModeldId(UUID modelId) {
 
     }
+
+   
 }
