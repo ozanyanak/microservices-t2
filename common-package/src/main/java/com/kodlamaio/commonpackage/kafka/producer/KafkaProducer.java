@@ -1,6 +1,6 @@
-package com.kodlamaio.inventoryservice.business.kafka.producer;
+package com.kodlamaio.commonpackage.kafka.producer;
 
-import com.kodlamaio.commonpackage.Events.CarCreatedEvent;
+import com.kodlamaio.commonpackage.events.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,23 +10,18 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-
 @Service
 @RequiredArgsConstructor
-
-public class InventoryProducer {
-
+public class KafkaProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-
-    public void sendMessage(CarCreatedEvent event) {
-        log.info(String.format("car-created event => %s", event.toString()));
-        Message<CarCreatedEvent> message = MessageBuilder
+    public <T extends Event> void sendMessage(T event, String topic) {
+        log.info(String.format("%s event => %s", topic, event.toString()));
+        Message<T> message = MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.TOPIC, "car-created")
+                .setHeader(KafkaHeaders.TOPIC, topic)
                 .build();
 
         kafkaTemplate.send(message);
     }
-
 }

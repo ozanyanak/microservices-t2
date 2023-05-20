@@ -1,4 +1,4 @@
-package com.kodlamaio.inventoryservice.configuration;
+package com.kodlamaio.commonpackage.configuration.mappers;
 
 import com.kodlamaio.commonpackage.utils.mappers.ModelMapperManager;
 import com.kodlamaio.commonpackage.utils.mappers.ModelMapperService;
@@ -8,16 +8,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ModelMapperConfig {
-
     @Bean
     public ModelMapper getModelMapper() {
         return new ModelMapper();
-
     }
 
     @Bean
     public ModelMapperService getModelMapperService(ModelMapper mapper) {
         return new ModelMapperManager(mapper);
-
     }
 }

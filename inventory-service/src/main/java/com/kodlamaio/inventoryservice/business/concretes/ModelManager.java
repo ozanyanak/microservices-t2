@@ -27,16 +27,20 @@ public class ModelManager implements ModelService {
     @Override
     public List<GetAllModelsResponse> getAll() {
         var models = repository.findAll();
-        var response = models.stream()
+        var response = models
+                .stream()
                 .map(model -> mapper.forResponse().map(model, GetAllModelsResponse.class))
                 .toList();
+
         return response;
     }
 
     @Override
     public GetModelResponse getById(UUID id) {
-        var model = repository.findById(id);
+        rules.checkIfModelExists(id);
+        var model = repository.findById(id).orElseThrow();
         var response = mapper.forResponse().map(model, GetModelResponse.class);
+
         return response;
     }
 
@@ -46,6 +50,7 @@ public class ModelManager implements ModelService {
         model.setId(null);
         repository.save(model);
         var response = mapper.forResponse().map(model, CreateModelResponse.class);
+
         return response;
     }
 
@@ -56,13 +61,13 @@ public class ModelManager implements ModelService {
         model.setId(id);
         repository.save(model);
         var response = mapper.forResponse().map(model, UpdateModelResponse.class);
+
         return response;
     }
 
     @Override
     public void delete(UUID id) {
-        //deneme
+        rules.checkIfModelExists(id);
         repository.deleteById(id);
-
     }
 }

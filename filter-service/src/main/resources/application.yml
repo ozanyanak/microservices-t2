@@ -5,8 +5,6 @@ spring:
     mongodb:
       database: filterdb-t2
       uri: mongodb://localhost:27017
-      username: turkcell
-      password: 1234
   kafka:
     consumer:
       auto-offset-reset: earliest
@@ -18,8 +16,6 @@ spring:
             trusted:
               packages: "*"
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-
-
 eureka:
   client:
     fetch-registry: true

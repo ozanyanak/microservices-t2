@@ -7,20 +7,19 @@ services:
     ports:
       - "9092:9092"
     volumes:
-      - kafka_data:/opt/kafka/kafka-logs
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.102:9092
+      - kafka_data:/opt//kafkakafka-logs
+    #environment:
+    #  KAFKA_ADVERTISED_LISTENER: PLAINTEXT://192.168.1.102:9092
+
 
   mongodb:
-    container_name: turkcell2-filterdb-dev
+    container_name: turkcell2-filterdb
     image: mongo
     ports:
-      - '27017:27017'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: "turkcell"
-      MONGO_INITDB_ROOT_PASSWORD: "1234"
+      - "27017:27017"
     volumes:
       - mongodb_data:/data/db/
+
 volumes:
   kafka_data:
   mongodb_data:

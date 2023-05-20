@@ -1,5 +1,6 @@
-package com.kodlamaio.commonpackage.Events;
+package com.kodlamaio.commonpackage.events.inventory;
 
+import com.kodlamaio.commonpackage.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarCreatedEvent {
-    private UUID id;
+public class CarCreatedEvent  implements Event{
+    private UUID carId;
     private UUID modelId;
     private UUID brandId;
     private int modelYear;
@@ -22,3 +23,4 @@ public class CarCreatedEvent {
     private String brandName;
     private double dailyPrice;
 }
+
