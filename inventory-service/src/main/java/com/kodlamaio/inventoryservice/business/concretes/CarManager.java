@@ -1,5 +1,6 @@
 package com.kodlamaio.inventoryservice.business.concretes;
 
+import com.kodlamaio.commonpackage.Events.CarCreatedEvent;
 import com.kodlamaio.commonpackage.utils.mappers.ModelMapperService;
 import com.kodlamaio.inventoryservice.business.abstracts.CarService;
 import com.kodlamaio.inventoryservice.business.dto.requests.Update.UpdateCarRequest;
@@ -8,6 +9,7 @@ import com.kodlamaio.inventoryservice.business.dto.responses.create.CreateCarRes
 import com.kodlamaio.inventoryservice.business.dto.responses.get.GetAllCarsResponse;
 import com.kodlamaio.inventoryservice.business.dto.responses.get.GetCarResponse;
 import com.kodlamaio.inventoryservice.business.dto.responses.update.UpdateCarResponse;
+import com.kodlamaio.inventoryservice.business.kafka.producer.InventoryProducer;
 import com.kodlamaio.inventoryservice.business.rules.CarBusinessRules;
 import com.kodlamaio.inventoryservice.entities.Car;
 import com.kodlamaio.inventoryservice.entities.enums.State;
@@ -24,6 +26,7 @@ public class CarManager implements CarService {
     private final CarRepository repository;
     private final ModelMapperService mapper;
     private final CarBusinessRules rules;
+    private final InventoryProducer producer;
 
     @Override
     public List<GetAllCarsResponse> getAll() {
@@ -33,41 +36,49 @@ public class CarManager implements CarService {
                 .map(car -> mapper.forResponse().map(car, GetAllCarsResponse.class))
                 .toList();
 
-
         return response;
     }
 
     @Override
     public GetCarResponse getById(UUID id) {
-        var car = repository.findById(id);
+        rules.checkIfCarExists(id);
+        var car = repository.findById(id).orElseThrow();
         var response = mapper.forResponse().map(car, GetCarResponse.class);
+
         return response;
     }
 
     @Override
     public CreateCarResponse add(CreateCarRequest request) {
         var car = mapper.forRequest().map(request, Car.class);
-
-        car.setId(null);
+        car.setId(UUID.randomUUID());
         car.setState(State.Available);
-        repository.save(car);
-        var response = mapper.forResponse().map(car, CreateCarResponse.class);
+        var createdCar = repository.save(car);
+        sendKafkaCarCreatedEvent(createdCar);
+        var response = mapper.forResponse().map(createdCar, CreateCarResponse.class);
+
         return response;
     }
 
     @Override
     public UpdateCarResponse update(UUID id, UpdateCarRequest request) {
         rules.checkIfCarExists(id);
-
         var car = mapper.forRequest().map(request, Car.class);
         car.setId(id);
         repository.save(car);
         var response = mapper.forResponse().map(car, UpdateCarResponse.class);
+
         return response;
     }
 
     @Override
     public void delete(UUID id) {
+        rules.checkIfCarExists(id);
         repository.deleteById(id);
+    }
+
+    private void sendKafkaCarCreatedEvent(Car createdCar) {
+        var event = mapper.forResponse().map(createdCar, CarCreatedEvent.class);
+        producer.sendMessage(event);
     }
 }

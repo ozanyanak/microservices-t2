@@ -36,7 +36,7 @@ public class CarsController {
         return service.add(request);
     }
 
-
+    //todo filter servise kısımlarını githubtan al
     @PutMapping("/{id}")
     public UpdateCarResponse getById(@PathVariable UUID id, @Valid @RequestBody UpdateCarRequest request) {
         return service.update(id, request);
