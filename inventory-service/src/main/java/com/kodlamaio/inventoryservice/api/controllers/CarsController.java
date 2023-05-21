@@ -1,5 +1,6 @@
 package com.kodlamaio.inventoryservice.api.controllers;
 
+import com.kodlamaio.commonpackage.utils.dto.ClientResponse;
 import com.kodlamaio.inventoryservice.business.abstracts.CarService;
 import com.kodlamaio.inventoryservice.business.dto.requests.Update.UpdateCarRequest;
 import com.kodlamaio.inventoryservice.business.dto.requests.create.CreateCarRequest;
@@ -36,7 +37,6 @@ public class CarsController {
         return service.add(request);
     }
 
-    //todo filter servise kısımlarını githubtan al
     @PutMapping("/{id}")
     public UpdateCarResponse getById(@PathVariable UUID id, @Valid @RequestBody UpdateCarRequest request) {
         return service.update(id, request);
@@ -45,5 +45,9 @@ public class CarsController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         service.delete(id);
+    }
+    @GetMapping("/check-car-available/{id}")
+    public ClientResponse checkIfCarAvailable(@PathVariable UUID id) {
+        return service.checkIfCarAvailable(id);
     }
 }
