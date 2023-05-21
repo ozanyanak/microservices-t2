@@ -1,7 +1,6 @@
 package com.kodlamaio.commonpackage.utils.constants;
 
 public class Paths {
-    //todo burayı kontrol edicen
     public static final String ConfigurationBasePackage = "com.kodlamaio.commonpackage.configuration";
 
     public static class Inventory {
@@ -14,5 +13,9 @@ public class Paths {
 
     public static class Rental {
         public static final String ServiceBasePackage = "com.kodlamaio.rentalservice";
+    }
+
+    public static class Maintenance {
+        public static final String ServiceBasePackage = "com.kodlamaio.maintenanceservice";
     }
 }
